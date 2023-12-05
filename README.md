@@ -103,6 +103,32 @@ this.$axios.post(process.env.API_HOST + '/detect', formdata).then(res => {
 })
 ```
 
+## 解决开发中请求跨域
+在开发中，通过webpack设立一个本地服务器作为请求的代理对象即可，该服务器会转发请求到目标服务器，将结果转发给前端。
+
+```js
+module.exprots = {
+
+    devServer: {
+
+        host: '127.0.0.1', // 本地地址
+        port: 8084, // 端口号
+        open: true, // 配置项目在启动时自动在浏览器打开
+        proxy: {
+
+            '/api' : {
+    // '/api'是代理标识，一般是每个接口前的相同部分
+                target: "http://xxx.xxx.xx.xx:8080", // 请求地址，一般是服务器地址
+                changeOrigin: true, // 是否进行跨域
+                pathRewrite: {
+    // pathRewrite的作用是把请求接口中的 '/api'替换掉，一般是替换为空""
+                    '^/api':""
+                }
+            }
+        }
+    }
+}
+```
 
 
 
